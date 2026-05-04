@@ -47,6 +47,9 @@ export default function ChatPage() {
 
     loadChats();
   }, []);
+   useEffect(() => {
+    setIsLoadingResponse(false);
+  }, [activeSessionId]);
 
   const activeSessionIndex = sessions.findIndex((session) => session.id === activeSessionId);
   const activeSession = sessions[activeSessionIndex] ?? sessions[0];
@@ -68,6 +71,7 @@ export default function ChatPage() {
 
   const handleNewChat = async () => {
     try {
+       setIsLoadingResponse(false);
       const response = await chatAPI.createChat("New Chat");
       const newChat = response.data.chat;
       setSessions((prev) => [newChat, ...prev]);
@@ -79,6 +83,7 @@ export default function ChatPage() {
   };
 
   const handleSelectSession = async (id) => {
+     setIsLoadingResponse(false);
     setActiveSessionId(id);
     await loadChat(id);
   };
@@ -320,7 +325,7 @@ export default function ChatPage() {
                   <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce delay-150"></div>
                   <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce delay-300"></div>
                 </div>
-                <span className="text-sm">Gemini is thinking...</span>
+                <span className="text-sm"> thinking...</span>
               </div>
             )}
           </div>

@@ -2,20 +2,54 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "../Services/api";
 
+
 export default function Signup() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const register = async () => {
-    try {
+   
       setError("");
+        if (!form.email && !form.password) {
+    setError("Please enter email and password");
+    return;
+  }
+
+  if (!form.email) {
+    setError("Please enter email");
+    return;
+  }
+
+  if (!form.password) {
+    setError("Please enter password");
+    return;
+  }
+
+  // Email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(form.email)) {
+    setError("Please enter a valid email address");
+    return;
+  }
+
+  // Password length
+  if (form.password.length < 6) {
+    setError("Password must be at least 6 characters");
+    return;
+  }
+   try {
+       setLoading(true);
       await authAPI.signup(form.email, form.password);
       alert("Account created!");
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Error creating account");
+       setError(err.response?.data?.message || "Registration failed");
     }
+    finally {
+    setLoading(false);
+  }
   };
 
  return (
@@ -73,12 +107,20 @@ export default function Signup() {
             )}
 
             {/* Button */}
-            <button
-              onClick={register}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition"
-            >
-              Create Account
-            </button>
+           <button
+  onClick={register}
+  disabled={loading}
+  className="w-full rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 py-4 font-semibold text-white flex items-center justify-center shadow-md hover:opacity-90 transition"
+>
+  {loading ? (
+    <div className="flex items-center gap-2">
+      <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+      <span>Creating account...</span>
+    </div>
+  ) : (
+    "Create Account"
+  )}
+</button>
           </div>
 
           {/* Footer */}

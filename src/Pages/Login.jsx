@@ -5,17 +5,47 @@ import { authAPI } from "../Services/api";
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const login = async () => {
-    try {
-      setError("");
-      await authAPI.login(form.email, form.password);
-      navigate("/chat");
-    } catch (err) {
-      setError(err.response?.data?.message || "Invalid credentials");
-    }
-  };
+ const login = async () => {
+  setError("");
+
+  // ✅ Validation FIRST (outside try)
+  if (!form.email && !form.password) {
+    setError("Please enter email and password");
+    return;
+  }
+
+  if (!form.email) {
+    setError("Please enter email");
+    return;
+  }
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(form.email)) {
+    setError("Please enter a valid email address");
+    return;
+  }
+  if (!form.password) {
+    setError("Please enter password");
+    return;
+  }
+
+  // Email format
+  
+
+  try {
+    setLoading(true);
+
+    await authAPI.login(form.email, form.password);
+
+    navigate("/chat");
+  } catch (err) {
+    setError(err.response?.data?.message || "Invalid credentials");
+  } finally {
+    setLoading(false);
+  }
+};
 
 return (
   <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] px-4">
@@ -61,12 +91,20 @@ return (
       )}
 
       {/* Button */}
-      <button
-        onClick={login}
-        className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 transition"
-      >
-        Sign In
-      </button>
+     <button
+  onClick={login}
+  disabled={loading}
+  className="w-full rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 py-4 font-semibold text-white flex items-center justify-center shadow-md hover:opacity-90 transition"
+>
+  {loading ? (
+    <div className="flex items-center gap-2">
+      <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+      <span>Signing in...</span>
+    </div>
+  ) : (
+    "Login"
+  )}
+</button>
 
       {/* Footer */}
       <p
