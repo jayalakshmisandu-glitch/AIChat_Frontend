@@ -65,9 +65,8 @@ Recommended simple setup:
 4. Set backend environment variables:
 
    ```text
-   FrontendUrl=https://YOUR-FRONTEND-URL
-   Gemini__ApiKey=YOUR_GEMINI_API_KEY
-   Gemini__Model=gemini-flash-lite-latest
+   FrontendUrl=https://ai-chat-frontend-mocha.vercel.app/
+   
    ```
 
 For local development, the app still uses:
