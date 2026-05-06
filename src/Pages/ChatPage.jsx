@@ -227,7 +227,13 @@ export default function ChatPage() {
       setIsLoadingResponse(false);
     }
   };
+const email = localStorage.getItem("userEmail") || "Guest";
 
+const username =
+  email.split("@")[0].charAt(0).toUpperCase() +
+  email.split("@")[0].slice(1);
+
+const initial = username.charAt(0).toUpperCase();
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-black text-white">

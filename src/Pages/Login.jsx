@@ -38,6 +38,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setLoading(true);
 
     await authAPI.login(form.email, form.password);
+    localStorage.setItem("userEmail", form.email);
 
     navigate("/chat");
   } catch (err) {

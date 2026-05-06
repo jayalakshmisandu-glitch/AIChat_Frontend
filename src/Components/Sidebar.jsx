@@ -29,6 +29,13 @@ export default function Sidebar({
     }
     setRenaming(null);
   };
+  const email = localStorage.getItem("userEmail") || "Guest";
+
+const username =
+  email.split("@")[0].charAt(0).toUpperCase() +
+  email.split("@")[0].slice(1);
+
+const initial = username.charAt(0).toUpperCase();
 
   return (
     <aside className="hidden w-72 flex-col border-r border-gray-200 bg-gradient-to-b from-gray-50 to-white shadow-sm sm:flex text-zinc-900">
@@ -131,14 +138,31 @@ export default function Sidebar({
         </div>
       </nav>
 
-      <div className="border-t border-gray-200 p-4">
+      {/* <div className="border-t border-gray-200 p-4">
         <button
           onClick={onLogout}
           className="w-full rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 px-4 py-3 text-left text-sm font-semibold text-white shadow-lg hover:shadow-glow hover:from-gray-800 hover:to-gray-700 transition-all duration-200"
         >
           Logout →
         </button>
-      </div>
+      </div> */}
+      <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 cursor-pointer">
+
+  {/* Circle Avatar */}
+  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+    {initial}
+  </div>
+
+  {/* User Details */}
+  <div className="flex flex-col">
+    <span className="text-sm font-medium text-black">
+      {username}
+    </span>
+
+   
+  </div>
+
+</div>
     </aside>
   );
 }
